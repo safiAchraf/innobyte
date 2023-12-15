@@ -66,7 +66,6 @@ def getuser(request):
         })
     
 
-
 @api_view(('GET','POST'))
 @permission_classes([IsAuthenticated])
 @csrf_exempt
@@ -75,9 +74,7 @@ def reservation(request , room_id):
         data = json.loads(request.body)
         start_date = data["start_date"]
         end_date = data["end_date"]
-        balcony = data["balcony"]
-        sea_view = data["sea_view"]
-        suite = data["suite"]
+        
         if start_date == "" or end_date == "" :
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data= {
                 "message": "All fields are required."
@@ -97,7 +94,7 @@ def reservation(request , room_id):
             newuser.reservation_set.create(start_date = start_date , end_date = end_date , room_id = room_id)
             newuser.save()
             available_room[0].save()
-            
+
         except IntegrityError as e:
             return Response(status=status.HTTP_400_BAD_REQUEST, data= {
                 "message": "Error in reservation."
