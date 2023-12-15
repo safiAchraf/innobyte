@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.response import Response
 from django.db import IntegrityError
-from .models import user , room , tasks
+from .models import user , room , tasks  , reservation
 from rest_framework.decorators import api_view , permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.views.decorators.csrf import csrf_exempt
@@ -86,12 +86,18 @@ def reservation(request , room_id):
             """check if there is available rooms with room_type in the given period
             if there is available rooms then reserve one of them
             else return error"""
-
             
-
+            available_room = room.filter(room_number = room_id)
+            if not available_room:
+                return Response(status=status.HTTP_400_BAD_REQUEST, data= {
+                    "message": "No available rooms."
+                })
+            available_room[0].available = False
             newuser = user.objects.get(id = request.user.id)
             newuser.reservation_set.create(start_date = start_date , end_date = end_date , room_id = room_id)
             newuser.save()
+            available_room[0].save()
+            
         except IntegrityError as e:
             return Response(status=status.HTTP_400_BAD_REQUEST, data= {
                 "message": "Error in reservation."
