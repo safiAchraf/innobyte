@@ -1,13 +1,13 @@
 
 ### Database Schema : 
-You can access it via [DrawSQL](https://drawsql.app/teams/safi-2/diagrams/junction)
+You can access it via [DrawSQL](https://drawsql.app/teams/safi-2/diagrams/innobyte)
 
-![App Screenshot](https://i.ibb.co/0Kmp0CQ/junction-schema.png)
+
 
 ## Tech Used
 
 - **Back-End**: Django, Django REST framework
-- **Database**: PostgreSql hosted on cockroachDB
+- **Database**: for now just SQlite 3 , in production we could use PostgreSQL
 - **Authentication**: JWT (JSON Web Tokens)
 
 ## End Points
@@ -23,24 +23,22 @@ You can access it via [DrawSQL](https://drawsql.app/teams/safi-2/diagrams/juncti
 - **api/getUser/** :
   returns the info of the user making the request
 
-- **api/dashboard/** :
-  based on the type of the user making the request , this endpoint returns the appropriate data for the dashboard for each type of user.
+- **api/reservation/** :
+    GET : returns the list of all the reservation if teh user making the request is Admin
+    POST : checks first if the targted room is available , then create a reservation for that .
 
-- **api/dashboard/parent/** :
-  returns the info the childs of the parent makeing the request . also offers the possibility of POST request for adding more childs
 
-- **api/task/<int: task_id >/** :
+- **api/tasks/** :
 
-  GET : return the task with task_id
+  GET : return the list of tasks ;
+  POST : let the superUser create new Tasks.
   PUT : update the status of completing of the task
 
-- **api/task/<int: task_id >/** :
+- **api/staffuser/ **
+  let the superUser to create a staff accounts for his workers.
 
-  GET : return all the chat of the course (
-  all the messages , the videos , and tasks
-  )
+- **api/rooms/ **
+  Offers CRUD ( create , read , update , delete ) operations for hotel rooms.
 
-  POST : offers the instructor to post a new course material to the course with id= course_id
-  the material may differ between a task for all the students in the course or a video
-
-++ Others ( i am too lazy to list them )
+  
+  
