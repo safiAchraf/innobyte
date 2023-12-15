@@ -46,7 +46,7 @@ def register(request):
             "message": "POST request required."
         })
 
-@api_view(('GET'))
+@api_view(['GET'])
 @permission_classes([IsAuthenticated])
 @csrf_exempt
 def getuser(request):
@@ -216,48 +216,6 @@ def rooms(request):
             rooms = room.objects.all()
             return Response(status=status.HTTP_200_OK, data= {
                 "rooms": rooms
-            })
-        elif request.method == "DELETE":
-            data = json.loads(request.body)
-            room_id = data["room_id"]
-            try:
-                room.objects.get(id = room_id).delete()
-            except IntegrityError as e:
-                return Response(status=status.HTTP_400_BAD_REQUEST, data= {
-                    "message": "Error in deleting room."
-                })
-            
-            
-            return Response(status=status.HTTP_200_OK, data= {
-                "message": "Room deleted successfully."
-            })
-        elif request.method == "PUT":
-            data = json.loads(request.body)
-            room_id = data["room_id"]
-            type = data["type"]
-            capacity = data["capacity"]
-            price = data["price"]
-            summary = data["summary"]
-            room_number = data["room_number"]
-            if type == "" or capacity == "" or price == "" or summary == "" or room_number == "":
-                return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data= {
-                    "message": "All fields are required."
-                })
-            
-            try:
-                room.objects.get(id = room_id).update(type = type , capacity = capacity , price = price , summary = summary , room_number = room_number)
-            except IntegrityError as e:
-                return Response(status=status.HTTP_400_BAD_REQUEST, data= {
-                    "message": "Error in updating room."
-                })
-            
-            
-            return Response(status=status.HTTP_200_OK, data= {
-                "message": "Room updated successfully."
-            })
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST , data= {
-                "message": "Bad request."
             })
     else:
         return Response(status=status.HTTP_401_UNAUTHORIZED , data= {
